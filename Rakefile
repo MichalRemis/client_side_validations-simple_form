@@ -20,12 +20,18 @@ namespace :test do
     test.warning = false
   end
 
-  desc %(Test Javascript code)
-  multitask js: ['regenerate_javascript', 'test:server', 'test:open']
+  desc %(Test JavaScript code)
+  task js: ['regenerate_javascript', 'test:server', ENV['CI'] ? 'test:open_ci' : 'test:open']
 
   desc %(Starts the test server)
   task :server do
-    system 'bundle exec ruby test/javascript/server.rb'
+    server_command = 'bundle exec ruby test/javascript/server.rb'
+
+    if ENV['CI']
+      @server = fork { exec server_command }
+    else
+      system server_command
+    end
   end
 
   desc %(Starts the test server which reloads everything on each refresh)
@@ -36,8 +42,18 @@ namespace :test do
   task :open do
     url = "http://localhost:#{PORT}"
     puts "Opening test app at #{url} ..."
-    sleep 3
     system(*browse_cmd(url))
+  end
+
+  task :open_ci do
+    require 'English'
+
+    system 'yarn test'
+    exit_code = $CHILD_STATUS.exitstatus
+
+    Process.kill 'INT', @server
+
+    exit exit_code unless exit_code.zero?
   end
 end
 
