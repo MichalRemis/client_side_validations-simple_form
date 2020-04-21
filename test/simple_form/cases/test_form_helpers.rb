@@ -176,7 +176,7 @@ module ClientSideValidations
         assert_dom_equal expected, output_buffer
       end
 
-      def test_date_field_validation_is_included_in_csv_hash
+      def test_date_input_validation_is_included_in_csv_hash
         input_html = ''
 
         simple_form_for(@post, validate: true) do |f|
@@ -199,7 +199,7 @@ module ClientSideValidations
         assert_dom_equal expected, output_buffer
       end
 
-      def test_time_field_validation_is_included_in_csv_hash
+      def test_time_input_validation_is_included_in_csv_hash
         input_html = ''
 
         simple_form_for(@post, validate: true) do |f|
@@ -222,7 +222,7 @@ module ClientSideValidations
         assert_dom_equal expected, output_buffer
       end
 
-      def test_datetime_field_validation_is_included_in_csv_hash
+      def test_datetime_input_validation_is_included_in_csv_hash
         input_html = ''
 
         simple_form_for(@post, validate: true) do |f|

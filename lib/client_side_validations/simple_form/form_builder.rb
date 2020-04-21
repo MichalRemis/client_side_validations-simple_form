@@ -35,24 +35,7 @@ module ClientSideValidations
           super(method, collection, value_method, text_method, options, html_options, &block)
         end
       end
-
-      ## following field types are called via FormBuilder as expected.. but are not implemented in CSV yet.. puting it here to make
-      ## it work faster but probably should be defined in CSV main form_builder.rb standartly as other field types
-      def date_select(method, options = {}, html_options = {})
-        validate(method) unless html_options[:validate] == false
-        super(method, options, html_options)
-      end
-
-      def time_select(method, options = {}, html_options = {})
-        validate(method) unless html_options[:validate] == false
-        super(method, options, html_options)
-      end
-
-      def datetime_select(method, options = {}, html_options = {})
-        validate(method) unless html_options[:validate] == false
-        super(method, options, html_options)
-      end
-
+      
       private
 
       def wrapper_error_component
