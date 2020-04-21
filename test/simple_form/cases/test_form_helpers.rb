@@ -256,7 +256,7 @@ module ClientSideValidations
         csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
           {
             validators: {
-              'post[roles]' => {
+              'user[role_ids]' => {
                 length: [{
                   messages: {
                     maximum: 'is too long (maximum is 99 characters)'
@@ -268,7 +268,7 @@ module ClientSideValidations
           }
         )
 
-        expected = %(<form accept-charset="UTF-8" action="/users" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_user" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
+        expected = %(<form accept-charset="UTF-8" action="/users" class="simple_form new_user" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_user" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
 
         assert_dom_equal expected, output_buffer
       end
@@ -277,21 +277,21 @@ module ClientSideValidations
         input_html = ''
 
         simple_form_for(@user, validate: true) do |f|
-          input_html = f.association(:department, as: :select)
+          input_html = f.association(:department, as: :radio_buttons)
           concat input_html
         end
 
         csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
           {
             validators: {
-              'post[department]' => {
-                presence: [{ message: "can't be blank" }]
+              'user[department_id]' => {
+                presence: [{ message: 'must exist' }]
               }
             }
           }
         )
 
-        expected = %(<form accept-charset="UTF-8" action="/users" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_user" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
+        expected = %(<form accept-charset="UTF-8" action="/users" class="simple_form new_user" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_user" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
 
         assert_dom_equal expected, output_buffer
       end

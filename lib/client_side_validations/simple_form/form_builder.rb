@@ -35,7 +35,7 @@ module ClientSideValidations
           super(method, collection, value_method, text_method, options, html_options, &block)
         end
       end
-      
+
       private
 
       def wrapper_error_component
