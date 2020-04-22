@@ -50,59 +50,7 @@ QUnit.module('Validate SimpleForm Bootstrap 4', {
                         $('<span>', { 'class': 'input-group-text', text: '@' })))
                   .append(
                     $('<input />', { 'class': 'form-control', name: 'user[username]', id: 'user_username', type: 'text' }))))
-          .append(`<div class="form-group date required user_date_of_birth">
-                    <label class="form-control-label date required" for="user_date_of_birth_1i">
-                      Date of birth <abbr title="required">*</abbr>
-                    </label>
-                    <div class="d-flex flex-row justify-content-between align-items-center">
-                      <select id="user_date_of_birth_1i" name="user[date_of_birth(1i)]" class="form-control mx-1 date required" data-client-side-validations-wrapper="vertical_multi_select" data-validate="true">
-                        <option value=""></option>
-                        <option value="2015">2015</option>
-                        <option value="2025">2025</option>
-                      </select>
-                      <select id="user_date_of_birth_2i" name="user[date_of_birth(2i)]" class="form-control mx-1 date required" data-client-side-validations-wrapper="vertical_multi_select" data-validate="true">
-                        <option value=""></option>
-                        <option value="1">January</option>
-                        <option value="2">February</option>
-                      </select>
-                      <select id="user_date_of_birth_3i" name="user[date_of_birth(3i)]" class="form-control mx-1 date required" data-client-side-validations-wrapper="vertical_multi_select" data-validate="true">
-                        <option value=""></option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </select>
-                    </div>
-                    <small class="form-text text-muted">hint text</small>
-                  </div>`)
-          .append(`<div class="form-group time required box_price form-group-invalid">
-                     <label class="form-control-label time required" for="box_price_4i">
-                       Price <abbr title="required">*</abbr>
-                     </label>
-                     <div class="d-flex flex-row justify-content-between align-items-center">
-                       <input type="hidden" id="user_time_of_birth_1i" name="box[user_time_of_birth(1i)]" value="1">
-                       <input type="hidden" id="buser_time_of_birth_2i" name="box[user_time_of_birth(2i)]" value="1">
-                       <input type="hidden" id="user_time_of_birth_3i" name="box[user_time_of_birth(3i)]" value="1">
-                       <select id="user_time_of_birth_4i" name="box[user_time_of_birth(4i)]" class="form-control mx-1 is-invalid time required" data-client-side-validations-wrapper="vertical_multi_select" aria-invalid="true">
-                         <option value=""></option>
-                         <option value="00">00</option>
-                         <option value="23">23</option>
-                       </select>
-                       :
-                       <select id="user_time_of_birth_5i" name="box[user_time_of_birth(5i)]" class="form-control mx-1 is-invalid time required" data-client-side-validations-wrapper="vertical_multi_select" aria-invalid="true">
-                         <option value=""></option>
-                         <option value="00">00</option>
-                         <option value="55">55</option>
-                       </select>
-                     </div>
-                     <div class="invalid-feedback d-block">
-                       Price can't be blank
-                     </div>
-                     <small class="form-text text-muted">
-                       Hint: At what time you were born?
-                     </small>
-                  </div>`)
-    )
-
+          )
     $('form#new_user').validate()
   }
 })

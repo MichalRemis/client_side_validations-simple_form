@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import ClientSideValidations from '@client-side-validations/client-side-validations'
+import './radio_checkbox_validators'
 
 ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
   add: function (element, settings, message) {

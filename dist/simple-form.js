@@ -13,6 +13,22 @@
   $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
   ClientSideValidations = ClientSideValidations && Object.prototype.hasOwnProperty.call(ClientSideValidations, 'default') ? ClientSideValidations['default'] : ClientSideValidations;
 
+  var originalPresenceValidator = ClientSideValidations.validators.local.presence;
+
+  ClientSideValidations.validators.local.presence = function (element, options) {
+    console.log(element);
+
+    if (element.attr('type') === 'checkbox') {
+      console.log(element);
+
+      if (element.closest('.form-group').find('input[type="checkbox"]:checked').length === 0) {
+        return options.message;
+      }
+    } else {
+      return originalPresenceValidator(element, options);
+    }
+  };
+
   ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
     add: function add(element, settings, message) {
       this.wrapper(this.wrapperName(element, settings)).add.call(this, element, settings, message);
