@@ -74,6 +74,31 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
 
         element.removeClass('is-invalid')
       }
+    },
+    vertical_collection: {
+      add (element, settings, message) {
+        const wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'))
+        const parentElement = element.parent()
+        let errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+
+        if (!errorElement.length) {
+          errorElement = $('<' + settings.error_tag + '>', { class: 'invalid-feedback d-block', text: message })
+          wrapperElement.append(errorElement)
+        }
+
+        wrapperElement.addClass(settings.wrapper_error_class)
+        element.addClass('is-invalid')
+        errorElement.text(message)
+      },
+      remove (element, settings) {
+        const wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'))
+        const errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+
+        wrapperElement.removeClass(settings.wrapper_error_class)
+        errorElement.remove()
+        element.removeClass('is-invalid')
+      }
+
     }
   }
 }
