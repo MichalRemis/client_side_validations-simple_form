@@ -15,13 +15,16 @@
 
   var originalPresenceValidator = ClientSideValidations.validators.local.presence;
 
+  function checkedCheckboxesCount(element, formSettings) {
+    var wrapperClass = formSettings.html_settings.wrapper_class;
+    return element.closest(".".concat(wrapperClass.replace(/ /g, '.'))).find('input[type="checkbox"]:checked').length;
+  }
+
   ClientSideValidations.validators.local.presence = function (element, options) {
     if (element.attr('type') === 'checkbox') {
       var formSettings = element.closest('form[data-client-side-validations]').data('clientSideValidations');
-      var wrapperTag = formSettings.html_settings.wrapper_tag;
-      var wrapperClass = formSettings.html_settings.wrapper_class;
 
-      if (element.closest(wrapperTag + '.' + wrapperClass.replace(/ /g, '.')).find('input[type="checkbox"]:checked').length === 0) {
+      if (checkedCheckboxesCount(element, formSettings) === 0) {
         return options.message;
       }
     } else {
