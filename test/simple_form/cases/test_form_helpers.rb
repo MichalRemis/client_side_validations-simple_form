@@ -176,74 +176,74 @@ module ClientSideValidations
         assert_dom_equal expected, output_buffer
       end
 
-      def test_date_input_validation_is_included_in_csv_hash
-        input_html = ''
-
-        simple_form_for(@post, validate: true) do |f|
-          input_html = f.input(:cost, as: :date)
-          concat input_html
-        end
-
-        csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
-          {
-            validators: {
-              'post[cost]' => {
-                presence: [{ message: "can't be blank" }]
-              }
-            }
-          }
-        )
-
-        expected = %(<form accept-charset="UTF-8" action="/posts" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_post" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
-
-        assert_dom_equal expected, output_buffer
-      end
-
-      def test_time_input_validation_is_included_in_csv_hash
-        input_html = ''
-
-        simple_form_for(@post, validate: true) do |f|
-          input_html = f.input(:cost, as: :time)
-          concat input_html
-        end
-
-        csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
-          {
-            validators: {
-              'post[cost]' => {
-                presence: [{ message: "can't be blank" }]
-              }
-            }
-          }
-        )
-
-        expected = %(<form accept-charset="UTF-8" action="/posts" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_post" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
-
-        assert_dom_equal expected, output_buffer
-      end
-
-      def test_datetime_input_validation_is_included_in_csv_hash
-        input_html = ''
-
-        simple_form_for(@post, validate: true) do |f|
-          input_html = f.input(:cost, as: :datetime)
-          concat input_html
-        end
-
-        csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
-          {
-            validators: {
-              'post[cost]' => {
-                presence: [{ message: "can't be blank" }]
-              }
-            }
-          }
-        )
-
-        expected = %(<form accept-charset="UTF-8" action="/posts" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_post" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
-
-        assert_dom_equal expected, output_buffer
-      end
+      # def test_date_input_validation_is_included_in_csv_hash
+      #   input_html = ''
+      #
+      #   simple_form_for(@post, validate: true) do |f|
+      #     input_html = f.input(:cost, as: :date)
+      #     concat input_html
+      #   end
+      #
+      #   csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
+      #     {
+      #       validators: {
+      #         'post[cost]' => {
+      #           presence: [{ message: "can't be blank" }]
+      #         }
+      #       }
+      #     }
+      #   )
+      #
+      #   expected = %(<form accept-charset="UTF-8" action="/posts" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_post" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
+      #
+      #   assert_dom_equal expected, output_buffer
+      # end
+      #
+      # def test_time_input_validation_is_included_in_csv_hash
+      #   input_html = ''
+      #
+      #   simple_form_for(@post, validate: true) do |f|
+      #     input_html = f.input(:cost, as: :time)
+      #     concat input_html
+      #   end
+      #
+      #   csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
+      #     {
+      #       validators: {
+      #         'post[cost]' => {
+      #           presence: [{ message: "can't be blank" }]
+      #         }
+      #       }
+      #     }
+      #   )
+      #
+      #   expected = %(<form accept-charset="UTF-8" action="/posts" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_post" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
+      #
+      #   assert_dom_equal expected, output_buffer
+      # end
+      #
+      # def test_datetime_input_validation_is_included_in_csv_hash
+      #   input_html = ''
+      #
+      #   simple_form_for(@post, validate: true) do |f|
+      #     input_html = f.input(:cost, as: :datetime)
+      #     concat input_html
+      #   end
+      #
+      #   csv_data = CSV_CONFIGURATION_PART_OF_HASH.merge(
+      #     {
+      #       validators: {
+      #         'post[cost]' => {
+      #           presence: [{ message: "can't be blank" }]
+      #         }
+      #       }
+      #     }
+      #   )
+      #
+      #   expected = %(<form accept-charset="UTF-8" action="/posts" class="simple_form new_post" data-client-side-validations="#{CGI.escapeHTML(csv_data.to_json)}" id="new_post" method="post" novalidate="novalidate"><input name="utf8" type="hidden" value="&#x2713;" />#{input_html}</form>)
+      #
+      #   assert_dom_equal expected, output_buffer
+      # end
 
       def test_habtm_association_field_validation_is_included_in_csv_hash
         input_html = ''

@@ -12,10 +12,10 @@ var originalPresenceValidator = ClientSideValidations.validators.local.presence;
 ClientSideValidations.validators.local.presence = function (element, options) {
   if (element.attr('type') === 'checkbox') {
     var formSettings = element.closest('form[data-client-side-validations]').data('clientSideValidations');
-    var wrapperTag = formSettings['html_settings']['wrapper_tag'];
-    var wrapperClass = formSettings['html_settings']['wrapper_class'];
+    var wrapperTag = formSettings.html_settings.wrapper_tag;
+    var wrapperClass = formSettings.html_settings.wrapper_class;
 
-    if (element.closest("".concat(wrapperTag, ".").concat(wrapperClass.replace(/ /g, '.'))).find('input[type="checkbox"]:checked').length === 0) {
+    if (element.closest(wrapperTag + '.' + wrapperClass.replace(/ /g, '.')).find('input[type="checkbox"]:checked').length === 0) {
       return options.message;
     }
   } else {
@@ -105,7 +105,6 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
     vertical_collection: {
       add: function add(element, settings, message) {
         var wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'));
-        var parentElement = element.parent();
         var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
 
         if (!errorElement.length) {
@@ -123,13 +122,8 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
       remove: function remove(element, settings) {
         var wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'));
         var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
-        var invalidSiblingExists = element.siblings('.is-invalid').length;
-
-        if (!invalidSiblingExists) {
-          wrapperElement.removeClass(settings.wrapper_error_class);
-          errorElement.remove();
-        }
-
+        wrapperElement.removeClass(settings.wrapper_error_class);
+        errorElement.remove();
         element.removeClass('is-invalid');
       }
     }

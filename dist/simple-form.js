@@ -18,10 +18,10 @@
   ClientSideValidations.validators.local.presence = function (element, options) {
     if (element.attr('type') === 'checkbox') {
       var formSettings = element.closest('form[data-client-side-validations]').data('clientSideValidations');
-      var wrapperTag = formSettings['html_settings']['wrapper_tag'];
-      var wrapperClass = formSettings['html_settings']['wrapper_class'];
+      var wrapperTag = formSettings.html_settings.wrapper_tag;
+      var wrapperClass = formSettings.html_settings.wrapper_class;
 
-      if (element.closest("".concat(wrapperTag, ".").concat(wrapperClass.replace(/ /g, '.'))).find('input[type="checkbox"]:checked').length === 0) {
+      if (element.closest(wrapperTag + '.' + wrapperClass.replace(/ /g, '.')).find('input[type="checkbox"]:checked').length === 0) {
         return options.message;
       }
     } else {

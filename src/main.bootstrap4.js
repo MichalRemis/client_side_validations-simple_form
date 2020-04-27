@@ -20,7 +20,7 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
     default: {
       add (element, settings, message) {
         const wrapperElement = element.parent()
-        let errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+        var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
 
         if (!errorElement.length) {
           errorElement = $('<' + settings.error_tag + '>', { class: 'invalid-feedback', text: message })
@@ -51,7 +51,7 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
       add (element, settings, message) {
         const wrapperElement = element.closest(settings.wrapper_tag + '.' + settings.wrapper_class.replace(/ /g, '.'))
         const parentElement = element.parent()
-        let errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+        var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
 
         if (!errorElement.length) {
           errorElement = $('<' + settings.error_tag + '>', { class: 'invalid-feedback d-block', text: message })
@@ -78,8 +78,7 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
     vertical_collection: {
       add (element, settings, message) {
         const wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'))
-        const parentElement = element.parent()
-        let errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+        var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
 
         if (!errorElement.length) {
           errorElement = $('<' + settings.error_tag + '>', { class: 'invalid-feedback d-block', text: message })

@@ -55,6 +55,8 @@ QUnit.module('Validate SimpleForm Bootstrap 4', {
   }
 })
 
+//I don think this multiple wrapper names makes sense here, because in SimpleForm different wrapper would have different DOM
+//but here DOM ($('#qunit-fixture')) is same for all tests.
 var wrappers = ['horizontal_form', 'vertical_form', 'inline_form']
 
 for (var i = 0; i < wrappers.length; i++) {
