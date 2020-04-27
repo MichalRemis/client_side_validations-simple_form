@@ -19,6 +19,10 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
   wrappers: {
     default: {
       add (element, settings, message) {
+       if (element.is('select') && (element.hasClass('date') || element.hasClass('time'))) {
+          console.log(this.wrappers.multi_select.add(element, settings, message))
+        }
+
         const wrapper = element.closest(settings.wrapper_tag + '.' + settings.wrapper_class.replace(/ /g, '.'))
         var errorElement = wrapper.find(settings.error_tag + '.' + settings.error_class.replace(/ /g, '.'))
 
@@ -43,12 +47,6 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
         wrapper.removeClass(settings.wrapper_error_class)
         return errorElement.remove()
       }
-    },
-    get horizontal_multi_select () {
-      return this.multi_select
-    },
-    get vertical_multi_select () {
-      return this.multi_select
     },
     multi_select: {
       add (element, settings, message) {
