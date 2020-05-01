@@ -91,7 +91,7 @@ window.ClientSideValidations.enablers.input = function (input) {
   });
 };
 
-ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
+var simpleFormFormBuilder = {
   add: function add(element, settings, message) {
     this.wrapper(this.wrapperName(element, settings)).add.call(this, element, settings, message);
   },
@@ -130,47 +130,6 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
         errorElement.remove();
       }
     },
-
-    get horizontal_collection() {
-      return this.vertical_collection;
-    },
-
-    vertical_collection: {
-      add: function add(element, settings, message) {
-        var wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'));
-        var parentElement = element.parent();
-        var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
-
-        if (!errorElement.length) {
-          errorElement = $('<' + settings.error_tag + '>', {
-            "class": 'invalid-feedback d-block',
-            text: message
-          });
-          element.closest('.form-check').parent().children('.form-check:last').after(errorElement);
-          element.closest('.form-check').parent().children('.form-check:last').after(errorElement);
-        }
-
-        wrapperElement.addClass(settings.wrapper_error_class);
-        wrapperElement.find('input:visible').addClass('is-invalid');
-        errorElement.text(message);
-      },
-      remove: function remove(element, settings) {
-        var wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'));
-        var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
-        wrapperElement.removeClass(settings.wrapper_error_class);
-        errorElement.remove();
-        wrapperElement.find('input:visible').removeClass('is-invalid');
-      }
-    },
-
-    get horizontal_multi_select() {
-      return this.multi_select;
-    },
-
-    get vertical_multi_select() {
-      return this.multi_select;
-    },
-
     multi_select: {
       add: function add(element, settings, message) {
         var wrapperElement = element.closest(settings.wrapper_tag + '.' + settings.wrapper_class.replace(/ /g, '.'));
@@ -204,3 +163,6 @@ ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
     }
   }
 };
+simpleFormFormBuilder.wrappers.horizontal_multi_select = simpleFormFormBuilder.wrappers.multi_select;
+simpleFormFormBuilder.wrappers.vertical_multi_select = simpleFormFormBuilder.wrappers.multi_select;
+ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = simpleFormFormBuilder;
