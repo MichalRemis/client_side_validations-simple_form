@@ -165,4 +165,5 @@ var simpleFormFormBuilder = {
 };
 simpleFormFormBuilder.wrappers.horizontal_multi_select = simpleFormFormBuilder.wrappers.multi_select;
 simpleFormFormBuilder.wrappers.vertical_multi_select = simpleFormFormBuilder.wrappers.multi_select;
+simpleFormFormBuilder.wrappers.horizontal_collection = simpleFormFormBuilder.wrappers.vertical_collection;
 ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = simpleFormFormBuilder;
