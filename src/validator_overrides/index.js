@@ -2,6 +2,7 @@ import './length'
 import './presence'
 import $ from 'jquery'
 
+
 // main CSV enabler doesnt attach validation events to radio buttons.. I do it here
 // It could be fixed in main CSV if radio_buttons validations are needed there and
 // in that case we may removed it from here
@@ -32,3 +33,4 @@ window.ClientSideValidations.enablers.input = function (input) {
     $(this).closest(`.${wrapperClass.replace(/ /g, '.')}`).find(':radio,:checkbox').data('changed', true)
   })
 }
+

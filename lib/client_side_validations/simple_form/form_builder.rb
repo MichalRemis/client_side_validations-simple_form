@@ -27,6 +27,16 @@ module ClientSideValidations
         super(attribute_name, options, &block)
       end
 
+      # this is not implemnted in main yet, so we add it here
+      %i[date_select datetime_select time_select].each do |method_name|
+        define_method method_name do |method, options = {}, html_options = {}|
+          build_validation_options(method, options)
+          html_options.delete(:validate)
+
+          super(method, options, html_options)
+        end
+      end
+
       # these methods don't call `super` in SimpleForm and therefore don't use overriden CSV FormBuilder methods
       # and therefore aren't included in CSV validations hash.. we add them to the hash here
       %i[collection_check_boxes collection_radio_buttons].each do |method_name|

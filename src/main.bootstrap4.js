@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import ClientSideValidations from '@client-side-validations/client-side-validations'
 import './validator_overrides/index'
+import './validator_overrides/main'
 
 const simpleFormFormBuilder = {
   add: function (element, settings, message) {
@@ -39,6 +40,30 @@ const simpleFormFormBuilder = {
         wrapperElement.removeClass(settings.wrapper_error_class)
         element.removeClass('is-invalid')
         errorElement.remove()
+      }
+    },
+    vertical_collection: {
+      add (element, settings, message) {
+        const wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'))
+        var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+
+        if (!errorElement.length) {
+          errorElement = $('<' + settings.error_tag + '>', { class: 'invalid-feedback d-block', text: message })
+          element.closest('.form-check').parent().children('.form-check:last').after(errorElement)
+          element.closest('.form-check').parent().children('.form-check:last').after(errorElement)
+        }
+
+        wrapperElement.addClass(settings.wrapper_error_class)
+        wrapperElement.find('input:visible').addClass('is-invalid')
+        errorElement.text(message)
+      },
+      remove (element, settings) {
+        const wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'))
+        const errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback')
+
+        wrapperElement.removeClass(settings.wrapper_error_class)
+        errorElement.remove()
+        wrapperElement.find('input:visible').removeClass('is-invalid')
       }
     },
     multi_select: {

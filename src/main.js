@@ -1,6 +1,7 @@
 import $ from 'jquery'
 import ClientSideValidations from '@client-side-validations/client-side-validations'
 import './validator_overrides/index'
+import './validator_overrides/main'
 
 ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = {
   add: function (element, settings, message) {

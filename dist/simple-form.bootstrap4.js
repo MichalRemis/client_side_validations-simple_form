@@ -8,10 +8,10 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(require('jquery'), require('@client-side-validations/client-side-validations')) :
   typeof define === 'function' && define.amd ? define(['jquery', '@client-side-validations/client-side-validations'], factory) :
   (global = global || self, factory(global.$, global.ClientSideValidations));
-}(this, (function ($, ClientSideValidations) { 'use strict';
+}(this, (function ($$1, ClientSideValidations$1) { 'use strict';
 
-  $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
-  ClientSideValidations = ClientSideValidations && Object.prototype.hasOwnProperty.call(ClientSideValidations, 'default') ? ClientSideValidations['default'] : ClientSideValidations;
+  $$1 = $$1 && Object.prototype.hasOwnProperty.call($$1, 'default') ? $$1['default'] : $$1;
+  ClientSideValidations$1 = ClientSideValidations$1 && Object.prototype.hasOwnProperty.call(ClientSideValidations$1, 'default') ? ClientSideValidations$1['default'] : ClientSideValidations$1;
 
   function checkedInputsCount(element) {
     var formSettings = element.closest('form[data-client-side-validations]').data('clientSideValidations');
@@ -19,7 +19,7 @@
     return element.closest(".".concat(wrapperClass.replace(/ /g, '.'))).find('input:checked').length;
   }
 
-  var originalLengthValidator = ClientSideValidations.validators.local.length;
+  var originalLengthValidator = ClientSideValidations$1.validators.local.length;
   var VALIDATIONS = {
     is: function is(a, b) {
       return a === parseInt(b, 10);
@@ -43,7 +43,7 @@
     }
   };
 
-  ClientSideValidations.validators.local.length = function (element, options) {
+  ClientSideValidations$1.validators.local.length = function (element, options) {
     if (element.attr('type') === 'checkbox') {
       var count = checkedInputsCount(element);
 
@@ -57,9 +57,9 @@
     }
   };
 
-  var originalPresenceValidator = ClientSideValidations.validators.local.presence;
+  var originalPresenceValidator = ClientSideValidations$1.validators.local.presence;
 
-  ClientSideValidations.validators.local.presence = function (element, options) {
+  ClientSideValidations$1.validators.local.presence = function (element, options) {
     if (element.attr('type') === 'checkbox' || element.attr('type') === 'radio') {
       if (checkedInputsCount(element) === 0) {
         return options.message;
@@ -76,7 +76,7 @@
 
   window.ClientSideValidations.enablers.input = function (input) {
     originalInputEnabler(input);
-    var $input = $(input);
+    var $input = $$1(input);
     var form = input.form;
     var eventsToBind = window.ClientSideValidations.eventsToBind.input(form);
     var wrapperClass = form.ClientSideValidations.settings.html_settings.wrapper_class;
@@ -84,18 +84,193 @@
     for (var eventName in eventsToBind) {
       var eventFunction = eventsToBind[eventName];
       $input.filter(':radio').each(function () {
-        return $(this).attr('data-validate', true);
+        return $$1(this).attr('data-validate', true);
       }).on(eventName, eventFunction);
     }
 
     $input.filter(':radio').on('change.ClientSideValidations', function () {
-      $(this).isValid(form.ClientSideValidations.settings.validators);
+      $$1(this).isValid(form.ClientSideValidations.settings.validators);
     }); // when we change radio/check mark also all sibling radios/checkboxes as changed to revalidate on submit
 
     $input.filter(':radio,:checkbox').on('change.ClientSideValidations', function () {
-      $(this).closest(".".concat(wrapperClass.replace(/ /g, '.'))).find(':radio,:checkbox').data('changed', true);
+      $$1(this).closest(".".concat(wrapperClass.replace(/ /g, '.'))).find(':radio,:checkbox').data('changed', true);
     });
   };
+
+  function _typeof(obj) {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+      _typeof = function (obj) {
+        return typeof obj;
+      };
+    } else {
+      _typeof = function (obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      };
+    }
+
+    return _typeof(obj);
+  }
+
+  $.fn.isValid = function (validators) {
+    var obj = $(this[0]);
+
+    if (obj.is('form')) {
+      return validateForm(obj, validators);
+    } else {
+      return validateElement(obj, validatorsFor(this[0].name, validators));
+    }
+  };
+
+  var cleanNestedElementName = function cleanNestedElementName(elementName, nestedMatches, validators) {
+    for (var validatorName in validators) {
+      if (validatorName.match('\\[' + nestedMatches[1] + '\\].*\\[\\]\\[' + nestedMatches[2] + '\\]$')) {
+        elementName = elementName.replace(/\[[\da-z_]+\]\[(\w+)\]$/g, '[][$1]');
+      }
+    }
+
+    return elementName;
+  };
+
+  var cleanElementName = function cleanElementName(elementName, validators) {
+    elementName = elementName.replace(/\[(\w+_attributes)\]\[[\da-z_]+\](?=\[(?:\w+_attributes)\])/g, '[$1][]');
+    elementName = elementName.replace(/\(\di\)/g, ''); // date/time_select (1/2/3/4/5i) fields
+
+    elementName = elementName.replace(/\]\[\]$/g, ']'); // fix many association collections
+
+    var nestedMatches = elementName.match(/\[(\w+_attributes)\].*\[(\w+)\]$/);
+
+    if (nestedMatches) {
+      elementName = cleanNestedElementName(elementName, nestedMatches, validators);
+    }
+
+    return elementName;
+  };
+
+  var validatorsFor = function validatorsFor(elementName, validators) {
+    if (Object.prototype.hasOwnProperty.call(validators, elementName)) {
+      return validators[elementName];
+    }
+
+    return validators[cleanElementName(elementName, validators)] || {};
+  };
+
+  var validateForm = function validateForm(form, validators) {
+    var valid = true;
+    form.trigger('form:validate:before.ClientSideValidations');
+    form.find(ClientSideValidations.selectors.validate_inputs).each(function () {
+      if (!$(this).isValid(validators)) {
+        valid = false;
+      }
+
+      return true;
+    });
+
+    if (valid) {
+      form.trigger('form:validate:pass.ClientSideValidations');
+    } else {
+      form.trigger('form:validate:fail.ClientSideValidations');
+    }
+
+    form.trigger('form:validate:after.ClientSideValidations');
+    return valid;
+  };
+
+  var passElement = function passElement(element) {
+    element.trigger('element:validate:pass.ClientSideValidations').data('valid', null);
+  };
+
+  var failElement = function failElement(element, message) {
+    element.trigger('element:validate:fail.ClientSideValidations', message).data('valid', false);
+  };
+
+  var afterValidate = function afterValidate(element) {
+    return element.trigger('element:validate:after.ClientSideValidations').data('valid') !== false;
+  };
+
+  var executeValidator = function executeValidator(validatorFunctions, validatorFunction, validatorOptions, element) {
+    for (var validatorOption in validatorOptions) {
+      if (!validatorOptions[validatorOption]) {
+        continue;
+      }
+
+      var message = validatorFunction.call(validatorFunctions, element, validatorOptions[validatorOption]);
+
+      if (message) {
+        failElement(element, message);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var executeValidators = function executeValidators(validatorFunctions, element, validators) {
+    for (var validator in validators) {
+      if (!validatorFunctions[validator]) {
+        continue;
+      }
+
+      if (!executeValidator(validatorFunctions, validatorFunctions[validator], validators[validator], element)) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  var isMarkedForDestroy = function isMarkedForDestroy(element) {
+    if (element.attr('name').search(/\[([^\]]*?)\]$/) >= 0) {
+      var destroyInputName = element.attr('name').replace(/\[([^\]]*?)\]$/, '[_destroy]');
+
+      if ($("input[name='" + destroyInputName + "']").val() === '1') {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  var executeAllValidators = function executeAllValidators(element, validators) {
+    if (element.data('changed') === false || element.prop('disabled')) {
+      return;
+    }
+
+    element.data('changed', false);
+
+    if (executeValidators(ClientSideValidations.validators.all(), element, validators)) {
+      passElement(element);
+    }
+  };
+
+  var validateElement = function validateElement(element, validators) {
+    element.trigger('element:validate:before.ClientSideValidations');
+
+    if (isMarkedForDestroy(element)) {
+      passElement(element);
+    } else {
+      executeAllValidators(element, validators);
+    }
+
+    return afterValidate(element);
+  };
+
+  if (!window.ClientSideValidations) {
+    window.ClientSideValidations = ClientSideValidations;
+
+    if (!isAMD() && !isCommonJS()) {
+      ClientSideValidations.start();
+    }
+  }
+
+  function isAMD() {
+    return typeof define === 'function' && define.amd; // eslint-disable-line no-undef
+  }
+
+  function isCommonJS() {
+    return (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined'; // eslint-disable-line no-undef
+  }
 
   var simpleFormFormBuilder = {
     add: function add(element, settings, message) {
@@ -117,7 +292,7 @@
           var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
 
           if (!errorElement.length) {
-            errorElement = $('<' + settings.error_tag + '>', {
+            errorElement = $$1('<' + settings.error_tag + '>', {
               "class": 'invalid-feedback',
               text: message
             });
@@ -136,6 +311,32 @@
           errorElement.remove();
         }
       },
+      vertical_collection: {
+        add: function add(element, settings, message) {
+          var wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'));
+          var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
+
+          if (!errorElement.length) {
+            errorElement = $$1('<' + settings.error_tag + '>', {
+              "class": 'invalid-feedback d-block',
+              text: message
+            });
+            element.closest('.form-check').parent().children('.form-check:last').after(errorElement);
+            element.closest('.form-check').parent().children('.form-check:last').after(errorElement);
+          }
+
+          wrapperElement.addClass(settings.wrapper_error_class);
+          wrapperElement.find('input:visible').addClass('is-invalid');
+          errorElement.text(message);
+        },
+        remove: function remove(element, settings) {
+          var wrapperElement = element.closest('.' + settings.wrapper_class.replace(/ /g, '.'));
+          var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
+          wrapperElement.removeClass(settings.wrapper_error_class);
+          errorElement.remove();
+          wrapperElement.find('input:visible').removeClass('is-invalid');
+        }
+      },
       multi_select: {
         add: function add(element, settings, message) {
           var wrapperElement = element.closest(settings.wrapper_tag + '.' + settings.wrapper_class.replace(/ /g, '.'));
@@ -143,7 +344,7 @@
           var errorElement = wrapperElement.find(settings.error_tag + '.invalid-feedback');
 
           if (!errorElement.length) {
-            errorElement = $('<' + settings.error_tag + '>', {
+            errorElement = $$1('<' + settings.error_tag + '>', {
               "class": 'invalid-feedback d-block',
               text: message
             });
@@ -172,6 +373,6 @@
   simpleFormFormBuilder.wrappers.horizontal_multi_select = simpleFormFormBuilder.wrappers.multi_select;
   simpleFormFormBuilder.wrappers.vertical_multi_select = simpleFormFormBuilder.wrappers.multi_select;
   simpleFormFormBuilder.wrappers.horizontal_collection = simpleFormFormBuilder.wrappers.vertical_collection;
-  ClientSideValidations.formBuilders['SimpleForm::FormBuilder'] = simpleFormFormBuilder;
+  ClientSideValidations$1.formBuilders['SimpleForm::FormBuilder'] = simpleFormFormBuilder;
 
 })));
