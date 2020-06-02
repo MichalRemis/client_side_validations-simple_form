@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/DavyJonesLocker/client_side_validations-simple_form",
   "scripts": {
-    "build": "standard --verbose && rollup -c",
+    "build": "rollup -c", // standard --verbose &&d
     "test": "test/javascript/run-qunit.js"
   },
   "devDependencies": {
